@@ -41,31 +41,9 @@ const SearchBar = () => {
     shadowRadius,
   } = styling;
 
-  const [styleLogo, setLogo] = useState({
-    height: "100%",
-    width: 75,
-    borderRadius: 50,
-    marginLeft: 16,
-    left: -100,
-  });
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      LayoutAnimation.linear();
-      setLogo((pev) => ({
-        height: "100%",
-        width: 75,
-        borderRadius: 50,
-        marginLeft: 16,
-      }));
-    }, 750);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/logo.webp")} style={styleLogo} />
+      <Image source={require("../../assets/logo.webp")} style={styles.logo} />
       <View
         style={{
           ...styles.searchContainer,

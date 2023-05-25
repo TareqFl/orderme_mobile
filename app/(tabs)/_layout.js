@@ -2,13 +2,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Tabs, useRouter } from "expo-router";
-import {
-  Platform,
-  Text,
-  NativeModules,
-  LayoutAnimation,
-  View,
-} from "react-native";
+import { Platform, NativeModules, LayoutAnimation, View } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -33,17 +27,17 @@ export default () => {
   });
   const { home, store, cart, auth, hc, sc, cc, lc } = allIcons;
   const navigation = useRouter();
+
   return (
     <Tabs
       sceneContainerStyle={{
         backgroundColor: "white",
       }}
-      screenListeners={({ route }) => {
+      screenListeners={async ({ route }) => {
         const { name } = route;
-        LayoutAnimation.spring();
-
         switch (name) {
           case "Home":
+            LayoutAnimation.spring();
             return setAllIcons((prev) => ({
               home: 35,
               store: 23,
@@ -55,6 +49,7 @@ export default () => {
               lc: "black",
             }));
           case "Store":
+            LayoutAnimation.spring();
             return setAllIcons((prev) => ({
               home: 23,
               store: 35,
@@ -66,6 +61,7 @@ export default () => {
               lc: "black",
             }));
           case "Cart":
+            LayoutAnimation.spring();
             return setAllIcons((prev) => ({
               home: 23,
               store: 23,
@@ -77,6 +73,7 @@ export default () => {
               lc: "black",
             }));
           case "Login":
+            LayoutAnimation.spring();
             return setAllIcons((prev) => ({
               home: 23,
               store: 23,

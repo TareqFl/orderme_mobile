@@ -1,5 +1,5 @@
 import { Image } from "@rneui/themed";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Animated,
   View,
@@ -14,8 +14,10 @@ import {
 import { useSelector } from "react-redux";
 import CartItems from "../../components/CartItems";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation, useRootNavigation } from "expo-router";
 
-const Store = () => {
+const Store = ({ data }) => {
+  alert(data);
   const { Cart } = useSelector((state) => state);
   const { height } = Dimensions;
   const pan = useRef(new Animated.ValueXY()).current;

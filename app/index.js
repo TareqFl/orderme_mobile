@@ -33,7 +33,10 @@ const index = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      LayoutAnimation.spring(() => navigation.push("Home"));
+      LayoutAnimation.spring(() => {
+        // navigation.push("Home")
+        navigation.push("Store");
+      });
       setshdw((prev) => ({
         elevation: 8,
         shadowColor: "black",
