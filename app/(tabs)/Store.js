@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Link } from "expo-router";
 
-const list = () => {
+const Store = () => {
   return (
     <View style={styles.container}>
       <Text>Store</Text>
@@ -10,7 +9,7 @@ const list = () => {
   );
 };
 
-export default list;
+export default Store;
 
 const styles = StyleSheet.create({
   container: {

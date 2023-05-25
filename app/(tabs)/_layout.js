@@ -1,9 +1,28 @@
 import Icon from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { Tabs } from "expo-router";
-import { Platform, Text } from "react-native";
+import { Tabs, useRouter } from "expo-router";
+import { Platform, Text, NativeModules, LayoutAnimation } from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import CartBadge from "../../components/CartBadge/CartBadge";
+
+const { UIManager } = NativeModules;
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
 export default () => {
+  const [allIcons, setAllIcons] = useState({
+    home: 25,
+    store: 25,
+    cart: 25,
+    auth: 25,
+  });
+  const { home, store, cart, auth } = allIcons;
+  const navigation = useRouter();
   return (
     <Tabs
       screenOptions={{
@@ -25,9 +44,6 @@ export default () => {
           shadowOpacity: 0.5,
           shadowRadius: 4,
         },
-        tabBarIcon: () => {
-          return <Text>hello</Text>;
-        },
       }}
     >
       <Tabs.Screen
@@ -35,7 +51,22 @@ export default () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => {
-            return <Icon name="home" size={25} color={"black"} />;
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  LayoutAnimation.spring();
+                  setAllIcons((prev) => ({
+                    home: 35,
+                    store: 25,
+                    cart: 25,
+                    auth: 25,
+                  }));
+                  return navigation.push("Home");
+                }}
+              >
+                <Icon name="home" size={home} color={"black"} />
+              </TouchableOpacity>
+            );
           },
           tabBarLabel: ({ position }) => {
             return (
@@ -69,8 +100,23 @@ export default () => {
               </Text>
             );
           },
-          tabBarIcon: (focused) => {
-            return <Fontisto name="shopping-store" size={25} color={"black"} />;
+          tabBarIcon: ({ focused }) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  LayoutAnimation.spring();
+                  setAllIcons((prev) => ({
+                    home: 25,
+                    store: 30,
+                    cart: 25,
+                    auth: 25,
+                  }));
+                  navigation.push("Store");
+                }}
+              >
+                <Fontisto name="shopping-store" size={store} color={"black"} />
+              </TouchableOpacity>
+            );
           },
         }}
       />
@@ -79,6 +125,10 @@ export default () => {
         name="Cart"
         options={{
           headerShown: false,
+          tabBarBadgeStyle: {
+            color: "white",
+            backgroundColor: "red",
+          },
           tabBarLabel: ({ position }) => {
             return (
               <Text
@@ -90,9 +140,22 @@ export default () => {
               </Text>
             );
           },
-          tabBarIcon: (focused) => {
+          tabBarIcon: ({ focused }) => {
             return (
-              <MaterialIcons name="shopping-cart" size={25} color="black" />
+              <TouchableOpacity
+                onPress={() => {
+                  LayoutAnimation.spring();
+                  setAllIcons((prev) => ({
+                    home: 25,
+                    store: 25,
+                    cart: 35,
+                    auth: 25,
+                  }));
+                  navigation.push("Cart");
+                }}
+              >
+                <CartBadge cart={cart} />
+              </TouchableOpacity>
             );
           },
         }}
@@ -113,7 +176,22 @@ export default () => {
             );
           },
           tabBarIcon: ({ focused }) => {
-            return <MaterialIcons name="login" size={25} color="black" />;
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  LayoutAnimation.spring();
+                  setAllIcons((prev) => ({
+                    home: 25,
+                    store: 25,
+                    cart: 25,
+                    auth: 35,
+                  }));
+                  navigation.push("Login");
+                }}
+              >
+                <MaterialIcons name="login" size={auth} color="black" />
+              </TouchableOpacity>
+            );
           },
         }}
       />

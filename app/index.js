@@ -1,13 +1,43 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Redirect } from "expo-router";
+import {
+  StyleSheet,
+  Text,
+  View,
+  NativeModules,
+  LayoutAnimation,
+  Pressable,
+  Image,
+} from "react-native";
+import React, { createRef, useEffect, useRef, useState } from "react";
+import { Redirect, useRouter } from "expo-router";
+
+const { UIManager } = NativeModules;
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
 
 const index = () => {
+  const [animText, setAnimText] = useState({
+    height: "100%",
+    width: "100%",
+    borderRadius: 0,
+  });
+  const navigation = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      LayoutAnimation.spring(() => navigation.push("Home"));
+      return setAnimText({
+        height: 200,
+        width: 200,
+        borderRadius: 100,
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
   return (
-    // <View style={styles.container}>
-    //   <Text>Main page</Text>
-    // </View>
-    <Redirect href="Home" />
+    <View style={styles.container}>
+      <Image source={require("../assets/logo.webp")} style={animText} />
+    </View>
   );
 };
 

@@ -1,11 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, StatusBar, SafeAreaView } from "react-native";
 import React from "react";
-
+import SearchBar from "../../components/HomeScreen/SearchBar";
+import ProductsCard from "../../components/HomeScreen/ProductsList";
 const Home = () => {
   return (
-    <View style={styles.container}>
-      <Text>Home</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar animated={true} hidden={false} barStyle={"dark-content"} />
+      <SearchBar />
+      <ProductsCard />
+    </SafeAreaView>
   );
 };
 
@@ -14,7 +17,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: "#fff",
   },
 });
