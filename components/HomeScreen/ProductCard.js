@@ -65,7 +65,7 @@ const ProductCard = ({ item, index }) => {
         </View>
 
         <TouchableOpacity onPress={handleCart}>
-          <MaterialIcons name="add-shopping-cart" size={30} color="tomato" />
+          <MaterialIcons name="add-shopping-cart" size={30} color="red" />
         </TouchableOpacity>
       </View>
     </View>

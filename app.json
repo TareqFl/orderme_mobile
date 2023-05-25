@@ -1,6 +1,7 @@
 {
   "expo": {
     "scheme": "acme",
+    "orientation": "portrait",
     "web": {
       "bundler": "metro"
     },

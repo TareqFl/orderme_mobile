@@ -6,7 +6,7 @@ import {
   NativeModules,
   LayoutAnimation,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { product_search } from "../../actions";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -25,7 +25,7 @@ const SearchBar = () => {
   }
 
   const [styling, setStyling] = useState({
-    width: "0%",
+    width: "25%",
     elevation: 2,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 1 },
@@ -40,9 +40,32 @@ const SearchBar = () => {
     shadowOpacity,
     shadowRadius,
   } = styling;
+
+  const [styleLogo, setLogo] = useState({
+    height: "100%",
+    width: 75,
+    borderRadius: 50,
+    marginLeft: 16,
+    left: -100,
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      LayoutAnimation.linear();
+      setLogo((pev) => ({
+        height: "100%",
+        width: 75,
+        borderRadius: 50,
+        marginLeft: 16,
+      }));
+    }, 750);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/logo.webp")} style={styles.logo} />
+      <Image source={require("../../assets/logo.webp")} style={styleLogo} />
       <View
         style={{
           ...styles.searchContainer,
@@ -51,6 +74,7 @@ const SearchBar = () => {
           shadowOffset,
           shadowOpacity,
           shadowRadius,
+          width,
         }}
       >
         <TouchableOpacity
@@ -58,7 +82,7 @@ const SearchBar = () => {
             LayoutAnimation.spring();
             if (width === "60%") {
               return setStyling((prev) => ({
-                width: "0%",
+                width: "25%",
                 elevation: 2,
                 shadowColor: "black",
                 shadowOffset: { width: 0, height: 1 },
@@ -76,13 +100,25 @@ const SearchBar = () => {
             }));
           }}
         >
-          <Ionicons name="search-outline" color="black" size={28} />
+          <View
+            style={{
+              backgroundColor: "#ECECEC",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+              borderTopLeftRadius: 12,
+              borderBottomLeftRadius: 12,
+              paddingLeft: 4,
+            }}
+          >
+            <Ionicons name="search-outline" color="tomato" size={32} />
+          </View>
         </TouchableOpacity>
         <TextInput
-          style={{ width }}
           placeholder="Search..."
           placeholderTextColor="black"
           onChangeText={handleSearch}
+          style={{ minWidth: 100 }}
         />
       </View>
     </View>
@@ -108,13 +144,14 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   searchContainer: {
-    borderRadius: 24,
+    borderRadius: 12,
     marginRight: 32,
-    padding: 12,
+    height: 48,
     fontSize: 12,
     backgroundColor: "white",
     borderWidth: 0,
     flexDirection: "row",
     alignItems: "center",
+    gap: 4,
   },
 });
