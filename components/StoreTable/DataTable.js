@@ -13,31 +13,13 @@ const DataTable = ({ data }) => {
     {
       value: "title",
       keyStyle: {
-        width: 90,
-      },
-    },
-    {
-      value: "brand",
-      keyStyle: {
-        width: 75,
+        width: 80,
       },
     },
     {
       value: "price",
       keyStyle: {
         width: 75,
-      },
-    },
-    {
-      value: "category",
-      keyStyle: {
-        width: 95,
-      },
-    },
-    {
-      value: "description",
-      keyStyle: {
-        width: 120,
       },
     },
 
@@ -47,16 +29,11 @@ const DataTable = ({ data }) => {
         width: 120,
       },
     },
-    {
-      value: "images",
-      keyStyle: {
-        width: 80,
-      },
-    },
+
     {
       value: "Action",
       keyStyle: {
-        width: 120,
+        width: 70,
       },
     },
   ];
@@ -66,8 +43,9 @@ const DataTable = ({ data }) => {
       <View
         style={{
           flexDirection: "row",
+          width: "100%",
           alignItems: "center",
-          width: 800,
+          justifyContent: "center",
         }}
       >
         {obj_keys.map((ky, indx) => {
@@ -81,7 +59,9 @@ const DataTable = ({ data }) => {
       </View>
       <View
         style={{
-          width: 800,
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <FlatList
@@ -98,7 +78,8 @@ export default DataTable;
 
 const styles = StyleSheet.create({
   container: {
-    height: 200,
+    flex: 1,
+    marginBottom: 75,
   },
 
   key: {
@@ -108,6 +89,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   title: {
-    fontSize: 18,
+    fontSize: 14,
   },
 });

@@ -1,10 +1,4 @@
-import {
-  ActivityIndicator,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import ProductCard from "./ProductCard";

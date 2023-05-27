@@ -2,14 +2,13 @@ import {
   GET_ALL_PRODUCTS,
   PRODUCT_SEARCH,
   CHECK_AUTH,
-  LOGIN,
   LOGOUT,
-  REGISTER,
   GET_STORE_PRODUCT,
   UPDATE_PRODUCT,
   ADD_PRODUCT,
   ADD_TO_CART,
   DELETE_FROM_CART,
+  DISPLAY_PRODUCT,
 } from "./types";
 import { DOMAIN } from "@env";
 import fakeData from "../fakeData.json";
@@ -45,7 +44,7 @@ export const product_search = (text, value) => {
 export const check_auth = () => async (dispatch) => {
   try {
     const stored_token = await AsyncStorage.getItem("token");
-    if (!token) {
+    if (!stored_token) {
       return dispatch({
         type: CHECK_AUTH,
         payload: { auth: false, username: "Guest" },
@@ -60,6 +59,7 @@ export const check_auth = () => async (dispatch) => {
     });
 
     const data = await response.json();
+
     return dispatch({
       type: CHECK_AUTH,
       payload: data,
@@ -68,56 +68,6 @@ export const check_auth = () => async (dispatch) => {
     return dispatch({
       type: CHECK_AUTH,
       payload: { auth: false, username: "Guest" },
-    });
-  }
-};
-
-export const login = (value) => async (dispatch) => {
-  try {
-    const response = await fetch(DOMAIN + "/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(value),
-    });
-
-    const data = await response.json();
-    const { token, auth, username } = data;
-    await AsyncStorage.setItem("token", token);
-    return dispatch({
-      type: LOGIN,
-      payload: { auth, username },
-    });
-  } catch (error) {
-    return dispatch({
-      type: LOGIN,
-      payload: error.message,
-    });
-  }
-};
-
-export const register = (value) => async (dispatch) => {
-  try {
-    const response = await fetch(DOMAIN + "/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(value),
-    });
-
-    const data = await response.json();
-    const { token, auth, username } = data;
-    await AsyncStorage.setItem("token", token);
-    return dispatch({
-      type: REGISTER,
-      payload: { auth, username },
-    });
-  } catch (error) {
-    return dispatch({
-      type: REGISTER,
-      payload: error.message,
     });
   }
 };
@@ -193,4 +143,8 @@ export const add_to_cart = (value) => {
     type: ADD_TO_CART,
     payload: value,
   };
+};
+
+export const display_product = (value) => {
+  return { type: DISPLAY_PRODUCT, payload: value };
 };

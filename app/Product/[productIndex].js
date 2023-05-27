@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
+  FlatList,
 } from "react-native";
 import { Image } from "@rneui/themed";
 import { useSearchParams, useRouter } from "expo-router";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { FlatList } from "react-native-gesture-handler";
 import Octicons from "react-native-vector-icons/Octicons";
 import Icons from "../../components/ProductPage/Icon";
 import RelatedProduct from "../../components/ProductPage/RelatedProduct";

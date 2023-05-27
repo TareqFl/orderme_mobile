@@ -1,72 +1,95 @@
 import {
   Platform,
-  ScrollView,
   StatusBar,
   StyleSheet,
   SafeAreaView,
-  Dimensions,
   View,
   Text,
+  ActivityIndicator,
+  TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import * as ScreenOrientation from "expo-screen-orientation";
+
 import DataTable from "../../components/StoreTable/DataTable";
-import { TouchableOpacity } from "react-native-gesture-handler";
-// "orientation": "portrait",
+import { useDispatch, useSelector } from "react-redux";
+import { get_store_products } from "../../actions";
+import DisplayProduct from "../../components/StorePage/DisplayProduct";
 
 const Store = () => {
-  const [data, setData] = useState([]);
-  const [window_width, setWindow] = useState(Dimensions.get("window").width);
-  useEffect(() => {
-    fetch("https://dummyjson.com/products?limit=10")
-      .then((res) => res.json())
-      .then((v) => setData(v.products))
-      .catch((err) => console.warn(err.message));
-  }, []);
+  const navigation = useRouter();
+  const dispatch = useDispatch();
+  const { Auth, Display_Product, Store_Products } = useSelector(
+    (state) => state
+  );
+  const { auth, token } = Auth;
 
   useEffect(() => {
-    const onOrientationChange = () => {
-      const orientation = ScreenOrientation.getOrientationAsync();
-      console.log("Current orientation:", orientation);
-      const { width } = Dimensions.get("window");
-      setWindow((prev) => width);
-      // Perform actions based on the orientation change
-    };
-
-    const subscription =
-      ScreenOrientation.addOrientationChangeListener(onOrientationChange);
-
-    return () => {
-      subscription.remove(); // Clean up the listener when component unmounts
-    };
+    dispatch(get_store_products());
   }, []);
+
+  if (!auth) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Youre not Logged in</Text>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      {window_width >= 800 ? (
-        <DataTable data={data} />
-      ) : (
-        <View
+      <View
+        style={{
+          minHeight: 150,
+          maxHeight: 400,
+          paddingHorizontal: Platform.OS === "ios" ? 16 : 0,
+          alignItems: "center",
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          {Store_Products ? (
+            <DataTable data={Store_Products} />
+          ) : (
+            <View
+              style={{
+                height: Platform.OS === "android" ? 150 : 200,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ActivityIndicator />
+            </View>
+          )}
+        </View>
+      </View>
+      <ScrollView style={styles.section}>
+        <TouchableOpacity
           style={{
-            window_width,
-            height: 300,
-            justifyContent: "center",
+            backgroundColor: "tomato",
+            width: 130,
+            paddingVertical: 10,
+            paddingHorizontal: 6,
             alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 8,
+            marginBottom: 10,
+          }}
+          onPress={() => {
+            // navigation.push("Edit")
           }}
         >
-          <Text>Please Rotate Screen To View Data!</Text>
-        </View>
-      )}
-      <ScrollView style={{ flex: 1, marginTop: 50 }}>
-        <View>
-          <TouchableOpacity>
-            <Text>Clear</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Clear</Text>
-          </TouchableOpacity>
-        </View>
+          <Text style={{ color: "#ffffff", fontWeight: "900" }}>
+            Add a new item
+          </Text>
+        </TouchableOpacity>
+        {Display_Product === null ? (
+          <Text style={{ textAlign: "center" }}>
+            Click on item Action button to display here
+          </Text>
+        ) : (
+          <DisplayProduct />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -77,7 +100,11 @@ export default Store;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 16,
-    paddingHorizontal: Platform.OS === "android" ? 16 : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 10 : 16,
+    justifyContent: "flex-start",
+    alignContent: "center",
+  },
+  section: {
+    paddingHorizontal: 16,
   },
 });

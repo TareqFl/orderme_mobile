@@ -8,13 +8,16 @@ import {
   Image,
 } from "react-native";
 import React, { createRef, useEffect, useRef, useState } from "react";
-import { Redirect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
+import { check_auth, get_all_products } from "../actions";
+import { useDispatch } from "react-redux";
 
 const { UIManager } = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
 
-const index = () => {
+const Splash = () => {
+  const dispatch = useDispatch();
   const [animText, setAnimText] = useState({
     height: "100%",
     width: "100%",
@@ -32,10 +35,11 @@ const index = () => {
   const navigation = useRouter();
 
   useEffect(() => {
+    dispatch(check_auth());
+    dispatch(get_all_products());
     const timer = setTimeout(() => {
       LayoutAnimation.spring(() => {
-        // navigation.push("Home")
-        navigation.push("Store");
+        navigation.push("Home");
       });
       setshdw((prev) => ({
         elevation: 8,
@@ -63,7 +67,7 @@ const index = () => {
   );
 };
 
-export default index;
+export default Splash;
 
 const styles = StyleSheet.create({
   container: {

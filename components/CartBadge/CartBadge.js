@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
@@ -25,8 +25,8 @@ const CartBadge = ({ cart, cc }) => {
           value={Cart.length > 0 ? Cart.length : 0}
           containerStyle={{
             position: "absolute",
-            right: 5,
-            top: -10,
+            right: 4,
+            top: -12,
             zIndex: 10,
           }}
           status="error"
@@ -35,9 +35,10 @@ const CartBadge = ({ cart, cc }) => {
           name="shopping-cart"
           size={cart}
           color={cc}
-          style={{ zIndex: 1 }}
+          style={{ zIndex: 1, alignSelf: "center" }}
         />
       </View>
+      <Text style={{ color: cc, fontSize: 10, textAlign: "center" }}>Cart</Text>
     </View>
   );
 };

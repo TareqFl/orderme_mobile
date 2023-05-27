@@ -2,30 +2,42 @@ import Icon from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Tabs, useRouter } from "expo-router";
-import { Platform, NativeModules, LayoutAnimation, View } from "react-native";
+import {
+  Platform,
+  NativeModules,
+  LayoutAnimation,
+  View,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import CartBadge from "../../components/CartBadge/CartBadge";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../actions";
 
 const { UIManager } = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
 
 export default () => {
+  const dispatch = useDispatch();
+  const { Auth } = useSelector((state) => state);
+  const { auth } = Auth;
   const [allIcons, setAllIcons] = useState({
     home: 25,
     store: 25,
     cart: 25,
-    auth: 25,
+    auth_: 25,
     hc: "black",
     sc: "black",
     cc: "black",
     lc: "black",
   });
-  const { home, store, cart, auth, hc, sc, cc, lc } = allIcons;
+  const { home, store, cart, auth_, hc, sc, cc, lc } = allIcons;
   const navigation = useRouter();
 
   return (
@@ -35,50 +47,49 @@ export default () => {
       }}
       screenListeners={async ({ route }) => {
         const { name } = route;
+        LayoutAnimation.spring();
         switch (name) {
           case "Home":
-            LayoutAnimation.spring();
             return setAllIcons((prev) => ({
               home: 35,
               store: 23,
               cart: 23,
-              auth: 23,
+              auth_: 23,
               hc: "tomato",
               sc: "black",
               cc: "black",
               lc: "black",
             }));
+
           case "Store":
-            LayoutAnimation.spring();
             return setAllIcons((prev) => ({
               home: 23,
               store: 35,
               cart: 23,
-              auth: 23,
+              auth_: 23,
               hc: "black",
               sc: "tomato",
               cc: "black",
               lc: "black",
             }));
           case "Cart":
-            LayoutAnimation.spring();
             return setAllIcons((prev) => ({
               home: 23,
               store: 23,
               cart: 35,
-              auth: 23,
+              auth_: 23,
               hc: "black",
               sc: "black",
               cc: "tomato",
               lc: "black",
             }));
+
           case "Login":
-            LayoutAnimation.spring();
             return setAllIcons((prev) => ({
               home: 23,
               store: 23,
               cart: 23,
-              auth: 35,
+              auth_: 35,
               hc: "black",
               sc: "black",
               cc: "black",
@@ -86,7 +97,7 @@ export default () => {
             }));
 
           default:
-            return;
+            break;
         }
       }}
       tabBar={() => {
@@ -119,7 +130,10 @@ export default () => {
                 return navigation.push("Home");
               }}
             >
-              <Icon name="home" size={home} color={hc} />
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <Icon name="home" size={home} color={hc} />
+                <Text style={{ color: hc, fontSize: 10 }}>Home</Text>
+              </View>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ width: 40 }}
@@ -127,7 +141,16 @@ export default () => {
                 navigation.push("Store");
               }}
             >
-              <Fontisto name="shopping-store" size={store} color={sc} />
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 2,
+                }}
+              >
+                <Fontisto name="shopping-store" size={store} color={sc} />
+                <Text style={{ color: sc, fontSize: 10 }}>Store</Text>
+              </View>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ width: 40 }}
@@ -140,10 +163,28 @@ export default () => {
             <TouchableOpacity
               style={{ width: 40 }}
               onPress={() => {
-                navigation.push("Login");
+                if (auth) {
+                  return dispatch(logout());
+                  // return navigation.push("Home");
+                }
+                return navigation.push("Login");
               }}
             >
-              <MaterialIcons name="login" size={auth} color={lc} />
+              {auth ? (
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <MaterialIcons name="logout" size={auth_} color={lc} />
+                  <Text style={{ color: "tomato", fontSize: 10 }}>Logout</Text>
+                </View>
+              ) : (
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <MaterialIcons name="login" size={auth_} color={lc} />
+                  <Text style={{ color: lc, fontSize: 10 }}>Login</Text>
+                </View>
+              )}
             </TouchableOpacity>
           </View>
         );

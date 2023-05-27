@@ -6,7 +6,7 @@ import ProductsCard from "../../components/HomeScreen/ProductsList";
 const Home = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar animated={true} hidden={false} barStyle={"dark-content"} />
+      <StatusBar barStyle={"dark-content"} />
       <SearchBar />
       <ProductsCard />
     </SafeAreaView>
@@ -18,6 +18,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
     paddingTop: StatusBar.currentHeight,
   },
 });

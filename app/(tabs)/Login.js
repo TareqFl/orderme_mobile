@@ -1,10 +1,114 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-
+import { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  Alert,
+} from "react-native";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { DOMAIN } from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+import { useDispatch } from "react-redux";
+import { check_auth } from "../../actions";
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigation = useRouter();
+
+  const [reg, setReg] = useState(false);
+  const [fact, setFact] = useState(true);
+  const [entries, setEntries] = useState({
+    username: "",
+    password: "",
+  });
+  const { username, password } = entries;
+
+  async function handleSubmit() {
+    if (username === "") {
+      return Alert.alert("Forgot Username");
+    }
+    if (password === "") {
+      return Alert.alert("Forgot Password");
+    }
+
+    try {
+      const response = await fetch(DOMAIN + (reg ? "/register" : "/login"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(entries),
+      });
+      const data = await response.json();
+      if (response.status !== 200) {
+        Alert.alert(data.message);
+      }
+
+      const { message, username, token } = data;
+      await AsyncStorage.setItem("token", token);
+
+      setEntries((prev) => ({ username: "", password: "" }));
+      dispatch(check_auth());
+      return navigation.push("Home");
+    } catch (error) {
+      Alert.alert("Something went went wrong", "please try agian in 5 minutes");
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Login</Text>
+      <View style={styles.form}>
+        <View style={styles.text}>
+          <TouchableOpacity onPress={() => setReg(!reg)}>
+            <Text>Click here to {reg ? "Login" : "Register"}</Text>
+          </TouchableOpacity>
+        </View>
+        <TextInput
+          style={styles.Input}
+          placeholder="Username"
+          placeholderTextColor="gray"
+          value={username}
+          onChangeText={(e) => setEntries((prev) => ({ ...prev, username: e }))}
+          autoCapitalize="none"
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderRadius: 12,
+            backgroundColor: "white",
+            elevation: 4,
+            paddingRight: 16,
+          }}
+        >
+          <TextInput
+            style={styles.password}
+            placeholder="Password"
+            placeholderTextColor="gray"
+            secureTextEntry={fact}
+            value={password}
+            onChangeText={(e) =>
+              setEntries((prev) => ({ ...prev, password: e }))
+            }
+          />
+          <Pressable onPress={() => setFact(!fact)}>
+            {fact ? (
+              <MaterialIcons name="visibility-off" color="gray" size={24} />
+            ) : (
+              <MaterialIcons name="visibility" color="gray" size={24} />
+            )}
+          </Pressable>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={{ fontWeight: "900", color: "white", fontSize: 16 }}>
+            {reg ? "Register" : "Login"}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -16,5 +120,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  form: {
+    height: "50%",
+    width: "75%",
+    justifyContent: "space-between",
+  },
+  text: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: "#fc6b68",
+    width: "100%",
+    paddingVertical: 14,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+  },
+  Input: {
+    backgroundColor: "white",
+    height: 76,
+    width: "100%",
+    borderRadius: 12,
+    elevation: 4,
+    padding: 8,
+  },
+  password: {
+    height: 76,
+    width: "90%",
+    borderRadius: 12,
+    padding: 8,
   },
 });
