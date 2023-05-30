@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "expo-router";
 
 import DataTable from "../../components/StoreTable/DataTable";
@@ -20,14 +20,14 @@ import DisplayProduct from "../../components/StorePage/DisplayProduct";
 const Store = () => {
   const navigation = useRouter();
   const dispatch = useDispatch();
-  const { Auth, Display_Product, Store_Products } = useSelector(
+  const { Auth, Display_Store_Product, Store_Products } = useSelector(
     (state) => state
   );
   const { auth, token } = Auth;
 
   useEffect(() => {
     dispatch(get_store_products());
-  }, []);
+  }, [Display_Store_Product]);
 
   if (!auth) {
     return (
@@ -41,7 +41,7 @@ const Store = () => {
     <SafeAreaView style={styles.container}>
       <View
         style={{
-          minHeight: 150,
+          minHeight: 200,
           maxHeight: 400,
           paddingHorizontal: Platform.OS === "ios" ? 16 : 0,
           alignItems: "center",
@@ -49,7 +49,7 @@ const Store = () => {
       >
         <View style={{ flex: 1 }}>
           {Store_Products ? (
-            <DataTable data={Store_Products} />
+            <DataTable />
           ) : (
             <View
               style={{
@@ -76,14 +76,14 @@ const Store = () => {
             marginBottom: 10,
           }}
           onPress={() => {
-            // navigation.push("Edit")
+            navigation.push("Edit/NewProduct");
           }}
         >
           <Text style={{ color: "#ffffff", fontWeight: "900" }}>
             Add a new item
           </Text>
         </TouchableOpacity>
-        {Display_Product === null ? (
+        {Display_Store_Product === null ? (
           <Text style={{ textAlign: "center" }}>
             Click on item Action button to display here
           </Text>

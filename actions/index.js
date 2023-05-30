@@ -8,7 +8,10 @@ import {
   ADD_PRODUCT,
   ADD_TO_CART,
   DELETE_FROM_CART,
+  CLEAR_CART,
   DISPLAY_PRODUCT,
+  REFRESH_DISPLAY_PRODUCT,
+  DISPLAY_STORE_PRODUCT,
 } from "./types";
 import { DOMAIN } from "@env";
 import fakeData from "../fakeData.json";
@@ -62,7 +65,7 @@ export const check_auth = () => async (dispatch) => {
 
     return dispatch({
       type: CHECK_AUTH,
-      payload: data,
+      payload: { auth: data.auth, username: data.username, token: data.token },
     });
   } catch (err) {
     return dispatch({
@@ -145,6 +148,33 @@ export const add_to_cart = (value) => {
   };
 };
 
+export const delete_from_cart = (value) => {
+  return {
+    type: DELETE_FROM_CART,
+    payload: value,
+  };
+};
+
+export const clear_cart = () => {
+  return {
+    type: CLEAR_CART,
+  };
+};
+
+// For Product PAge
+
 export const display_product = (value) => {
   return { type: DISPLAY_PRODUCT, payload: value };
+};
+
+// For Edit Screen
+export const refresh_display_product = () => {
+  return { type: REFRESH_DISPLAY_PRODUCT };
+};
+
+export const display_store_product = (value) => {
+  return {
+    type: DISPLAY_STORE_PRODUCT,
+    payload: value,
+  };
 };

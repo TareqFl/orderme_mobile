@@ -11,30 +11,20 @@ import {
   FlatList,
 } from "react-native";
 import { Image } from "@rneui/themed";
-import { useSearchParams, useRouter } from "expo-router";
-import { useSelector } from "react-redux";
+import { useRouter } from "expo-router";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Octicons from "react-native-vector-icons/Octicons";
 import Icons from "../../components/ProductPage/Icon";
 import RelatedProduct from "../../components/ProductPage/RelatedProduct";
 import Comments from "../../components/ProductPage/Comments";
+import { add_to_cart } from "../../actions";
 
 const ProductPage = () => {
   const { width } = useWindowDimensions();
-  const { productIndex } = useSearchParams();
   const navigation = useRouter();
-  const { Products } = useSelector((state) => state);
-  const [displayProduct, setProduct] = useState({
-    id: "",
-    title: "",
-    price: "",
-    brand: "",
-    category: "",
-    description: "",
-    rating: "",
-    thumbnail: "",
-    images: [],
-  });
+  const dispatch = useDispatch();
+  const { Products, Display_Product, Cart } = useSelector((state) => state);
 
   const {
     id,
@@ -46,20 +36,14 @@ const ProductPage = () => {
     rating,
     thumbnail,
     images,
-  } = displayProduct;
+  } = Display_Product;
 
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   useEffect(() => {
-    setProduct((prev) => Products[productIndex]);
-    const related = Products.filter((itm) => {
-      if (itm.category === category) {
-        return itm;
-      }
-      return;
-    });
+    const related = Products.filter((itm) => itm.category === category);
     setRelatedProducts((prev) => [...related]);
-  }, [displayProduct]);
+  }, [Display_Product]);
 
   const lists = [
     "Sed sed nunc tincidunt, dapibus erat ac, dapibus lacus.",
@@ -71,6 +55,54 @@ const ProductPage = () => {
     "Quisque vulputate lectus quis eros aliquet, vitae condimentum orci fermentum.",
     "Curabitur condimentum odio eget nulla feugiat, quis tempor justo hendrerit.",
   ];
+
+  async function handleBuyNow() {
+    const all_products = Cart;
+    const item = Display_Product;
+    let index = 0;
+    const found_product = Cart.find((prod, indx) => {
+      if (prod === item) {
+        index = indx;
+        return prod;
+      }
+    });
+
+    if (found_product) {
+      found_product.quantity = found_product.quantity + 1;
+      all_products[index] = found_product;
+
+      return dispatch(add_to_cart([...all_products]));
+    } else {
+      item.quantity = 1;
+      all_products.push(item);
+
+      dispatch(add_to_cart([...all_products]));
+      return navigation.push("Product/BuyPage");
+    }
+  }
+  function handleCart() {
+    const all_products = Cart;
+    const item = Display_Product;
+    let index = 0;
+    const found_product = Cart.find((prod, indx) => {
+      if (prod === item) {
+        index = indx;
+        return prod;
+      }
+    });
+
+    if (found_product) {
+      found_product.quantity = found_product.quantity + 1;
+      all_products[index] = found_product;
+
+      return dispatch(add_to_cart([...all_products]));
+    } else {
+      item.quantity = 1;
+      all_products.push(item);
+
+      return dispatch(add_to_cart([...all_products]));
+    }
+  }
 
   return (
     <SafeAreaView
@@ -85,7 +117,7 @@ const ProductPage = () => {
         contentContainerStyle={{ padding: 16 }}
       >
         <FlatList
-          keyExtractor={({ item, index }) => index}
+          keyExtractor={({ item }) => item}
           data={images.length > 0 ? [...images] : []}
           renderItem={({ item }) => (
             <Image
@@ -131,7 +163,7 @@ const ProductPage = () => {
                 shadowOpacity: 0.25,
                 shadowRadius: 4,
               }}
-              onPress={() => navigation.push("Product/BuyPage")}
+              onPress={handleBuyNow}
             >
               <Text style={{ color: "white", fontWeight: "700" }}>Buy Now</Text>
             </TouchableOpacity>
@@ -149,6 +181,7 @@ const ProductPage = () => {
                 shadowOpacity: 0.25,
                 shadowRadius: 4,
               }}
+              onPress={handleCart}
             >
               <Text style={{ color: "white", fontWeight: "700" }}>
                 Add To Cart
@@ -185,8 +218,10 @@ const ProductPage = () => {
         </Text>
         <FlatList
           data={relatedProducts}
-          keyExtractor={({ item, index }) => index}
-          renderItem={({ item }) => <RelatedProduct item={item} />}
+          keyExtractor={({ item }) => item}
+          renderItem={({ item }) =>
+            item !== Display_Product && <RelatedProduct item={item} />
+          }
           horizontal
           showsHorizontalScrollIndicator={false}
         />

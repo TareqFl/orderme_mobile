@@ -3,7 +3,11 @@ import { Platform } from "react-native";
 
 const Edit = () => {
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        animation: "slide_from_bottom",
+      }}
+    >
       <Stack.Screen
         name="NewProduct"
         options={{

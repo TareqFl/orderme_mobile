@@ -8,12 +8,12 @@ import {
 import { Image } from "@rneui/themed";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
-import { add_to_cart } from "../../actions";
+import { add_to_cart, display_product } from "../../actions";
 const ProductCard = ({ item, index }) => {
-  const navigation = useRouter();
-
+  const navRouter = useRouter();
+  const navigation = useNavigation();
   const { id, title, price, brand, category, description, rating, thumbnail } =
     item;
 
@@ -41,7 +41,10 @@ const ProductCard = ({ item, index }) => {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.thumbnailContainer}
-        onPress={() => navigation.push(`/Product/${index}`)}
+        onPress={() => {
+          navRouter.push(`Product/ProductPage`, { data: item });
+          return dispatch(display_product(item));
+        }}
       >
         <Image
           source={{ uri: thumbnail }}

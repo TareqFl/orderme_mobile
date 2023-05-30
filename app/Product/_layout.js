@@ -4,17 +4,17 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 const StackLayout = () => {
   const navigation = useRouter();
   return (
-    <Stack>
+    <Stack screenOptions={{}}>
       <Stack.Screen
         name="BuyPage"
         options={{
-          headerShown: Platform.OS === "ios" ? true : false,
+          headerShown: false,
         }}
       />
       <Stack.Screen
-        name="[productIndex]"
+        name="ProductPage"
         options={{
-          headerShown: Platform.OS === "ios" ? true : false,
+          headerShown: false,
           header:
             Platform.OS === "ios" &&
             (() => {

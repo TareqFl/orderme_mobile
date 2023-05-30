@@ -1,8 +1,10 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import TableRows from "./TableRows";
+import { useSelector } from "react-redux";
 
-const DataTable = ({ data }) => {
+const DataTable = () => {
+  const { Store_Products } = useSelector((state) => state);
   const obj_keys = [
     {
       value: "id",
@@ -66,7 +68,7 @@ const DataTable = ({ data }) => {
       >
         <FlatList
           key={({ item, index }) => index}
-          data={data ? data : []}
+          data={Store_Products ? Store_Products : []}
           renderItem={({ item }) => <TableRows value={item} />}
         />
       </View>

@@ -1,76 +1,208 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Input } from "@rneui/themed";
+import { useDispatch, useSelector } from "react-redux";
+import { Input, Image } from "@rneui/themed";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { DOMAIN } from "@env";
+import { useRouter } from "expo-router";
+import { get_store_products, refresh_display_product } from "../../actions";
+import * as ImagePicker from "expo-image-picker";
 
 const EditProduct = () => {
-  const { Display_Product } = useSelector((state) => state);
-  const [images, setImages] = useState([]);
+  const navigation = useRouter();
+  const dispatch = useDispatch();
+  const { Display_Store_Product } = useSelector((state) => state);
+  const [toDelete, setToDelete] = useState([]);
   const [entries, setEntries] = useState({
+    id: "",
     title: "",
     brand: "",
     price: "",
     category: "",
     description: "",
     thumbnail: "",
+    images: [],
+    changed_thumbnail: false,
+    changed_images: false,
   });
 
-  const [entryError, setError] = useState({
-    title_error: "",
-    brand_error: "",
-    price_error: "",
-    category_error: "",
-    description_error: "",
-  });
-
-  const { title, brand, price, category, description, thumbnail } = entries;
   const {
-    title_error,
-    brand_error,
-    price_error,
-    category_error,
-    description_error,
-  } = entryError;
+    id,
+    title,
+    brand,
+    price,
+    category,
+    description,
+    thumbnail,
+    images,
+    changed_thumbnail,
+    changed_images,
+  } = entries;
 
   useEffect(() => {
-    setEntries((prev) => Display_Product);
+    console.log(Display_Store_Product.brand);
+    setEntries((prev) => ({
+      ...Display_Store_Product,
+      changed_thumbnail: false,
+      changed_images: false,
+    }));
   }, []);
+
+  async function handleThumbnail() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+      allowsMultipleSelection: false,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      return setEntries((prev) => ({
+        ...prev,
+        thumbnail: result.assets[0],
+        changed_thumbnail: true,
+      }));
+    }
+    return;
+  }
+
+  async function handleImages() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+      allowsMultipleSelection: true,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      return setEntries((prev) => ({
+        ...prev,
+        images: [...images, ...result.assets],
+        changed_images: true,
+      }));
+    }
+    return;
+  }
+
+  async function handleSubmit() {
+    // handle errors
+    let formKeys = Object.keys(entries);
+    formKeys.map((key) => {
+      if (entries[key] === "" || entries[key].length === 0) {
+        return Alert.alert("Error!", `Your forgot to change ${key}`);
+      }
+    });
+
+    const form = new FormData();
+    form.append("id", id);
+    form.append("title", title);
+    form.append("brand", brand);
+    form.append("price", price);
+    form.append("category", category);
+    form.append("description", description);
+    form.append("changed_thumbnail", changed_thumbnail);
+    form.append("changed_images", changed_images);
+    if (typeof thumbnail !== "string") {
+      form.append("thumbnail", {
+        uri: thumbnail.uri,
+        type: thumbnail.type,
+        name: thumbnail.fileName,
+      });
+    }
+    images.forEach((img, index) => {
+      typeof img !== "string" &&
+        form.append(`images${index}`, {
+          uri: img.uri,
+          type: img.type,
+          name: img.fileName,
+        });
+    });
+    const response = await fetch(DOMAIN + "/update_product", {
+      method: "POST",
+      body: form,
+    });
+
+    if (toDelete.length > 0) {
+      toDelete.map((img) => {
+        fetch(img, { method: "DELETE" })
+          .then((resp) => resp)
+          .catch((err) => err);
+      });
+    }
+
+    const data = await response.json();
+    if (response.status === 200) {
+      navigation.back();
+      dispatch(refresh_display_product());
+      return dispatch(get_store_products());
+    }
+    return Alert.alert("something went wrong please try again");
+  }
+
+  function handleImageDelete(img, index) {
+    const new_images = images.filter((img__) => img__ !== img && img__);
+
+    if (typeof img !== "string") {
+      return setEntries((prev) => ({
+        ...prev,
+        images: [...new_images],
+      }));
+    }
+    setToDelete((prev) => [...prev, img]);
+    return setEntries((prev) => ({
+      ...prev,
+      images: [...new_images],
+    }));
+  }
 
   return (
     <ScrollView style={styles.container}>
+      <Text style={{ textAlign: "center", fontSize: 16, marginVertical: 8 }}>
+        Changes wont take effect until you submit
+      </Text>
       <View style={styles.container}>
         <Input
           containerStyle={styles.input}
           placeholder="Title"
-          errorStyle={{ color: "red" }}
-          errorMessage={title_error}
           value={title}
-          onChangeText={(e) => setEntries((prev) => ({ ...prev, title: e }))}
+          onChangeText={(e) => {
+            return setEntries((prev) => ({ ...prev, title: e }));
+          }}
         />
         <Input
           containerStyle={styles.input}
           placeholder="Brand"
-          errorStyle={{ color: "red" }}
-          errorMessage={brand_error}
           value={brand}
-          onChangeText={(e) => setEntries((prev) => ({ ...prev, brand: e }))}
+          onChangeText={(e) => {
+            return setEntries((prev) => ({ ...prev, brand: e }));
+          }}
         />
         <Input
           containerStyle={styles.input}
           placeholder="Price"
-          inputMode="numeric"
-          errorStyle={{ color: "red" }}
-          errorMessage={price_error}
-          value={price}
-          onChangeText={(e) => setEntries((prev) => ({ ...prev, price: e }))}
+          value={price.toString()}
+          onChangeText={(e) => {
+            return setEntries((prev) => ({ ...prev, price: e }));
+          }}
         />
         <Input
           containerStyle={styles.input}
           placeholder="Category"
-          errorStyle={{ color: "red" }}
-          errorMessage={category_error}
           value={category}
-          onChangeText={(e) => setEntries((prev) => ({ ...prev, category: e }))}
+          onChangeText={(e) => {
+            return setEntries((prev) => ({ ...prev, category: e }));
+          }}
         />
         <Input
           containerStyle={styles.description}
@@ -78,14 +210,110 @@ const EditProduct = () => {
           numberOfLines={4}
           maxLength={250}
           placeholder="Description"
-          errorStyle={{ color: "red" }}
-          errorMessage={description_error}
           value={description}
-          onChangeText={(e) =>
-            setEntries((prev) => ({ ...prev, description: e }))
-          }
+          onChangeText={(e) => {
+            return setEntries((prev) => ({ ...prev, description: e }));
+          }}
         />
       </View>
+      <Text style={{ textAlign: "center" }}> Click on an Image to delete</Text>
+      <View
+        style={{
+          width: "100%",
+          paddingHorizontal: 16,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            marginVertical: 16,
+          }}
+        >
+          <TouchableOpacity style={styles.upload} onPress={handleThumbnail}>
+            <Text style={styles.uploadText}>Thumbnail</Text>
+          </TouchableOpacity>
+          {thumbnail && (
+            <TouchableOpacity
+              onPress={() => setEntries((prev) => ({ ...prev, thumbnail: "" }))}
+            >
+              <Image
+                source={{
+                  uri:
+                    typeof thumbnail === "string" ? thumbnail : thumbnail.uri,
+                }}
+                containerStyle={{ height: 100, width: 100 }}
+                PlaceholderContent={
+                  <ActivityIndicator style={{ height: 100, width: 100 }} />
+                }
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            marginVertical: 16,
+            flexWrap: "wrap",
+          }}
+        >
+          <TouchableOpacity style={styles.upload} onPress={handleImages}>
+            <Text style={styles.uploadText}>Images</Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+          >
+            {images.length !== 0 &&
+              images.map((img, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleImageDelete(img, index)}
+                  >
+                    <Image
+                      source={{ uri: typeof img === "string" ? img : img.uri }}
+                      PlaceholderContent={
+                        <ActivityIndicator
+                          style={{ height: 100, width: 100 }}
+                        />
+                      }
+                      containerStyle={{ height: 100, width: 100 }}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
+          </View>
+        </View>
+      </View>
+
+      <TouchableOpacity
+        style={{
+          width: "90%",
+          height: 60,
+          backgroundColor: "tomato",
+          alignItems: "center",
+          justifyContent: "center",
+          marginVertical: 50,
+          borderRadius: 12,
+          alignSelf: "center",
+        }}
+        onPress={handleSubmit}
+      >
+        <Text style={{ color: "white", fontWeight: "900", fontSize: 14 }}>
+          Submit
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -96,4 +324,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  upload: {
+    // width: "25%",
+    paddingVertical: 12,
+    paddingHorizontal: 4,
+    backgroundColor: "tomato",
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 5,
+  },
+  uploadText: { color: "white", fontWeight: "900" },
 });

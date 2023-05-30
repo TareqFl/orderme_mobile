@@ -6,13 +6,21 @@ import {
   ScrollView,
   Pressable,
   Alert,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { OrientationLock, lockAsync } from "expo-screen-orientation";
-import { Image, Input } from "@rneui/themed";
+import { Input } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
+import { DOMAIN } from "@env";
+import { useDispatch } from "react-redux";
+import { get_store_products } from "../../actions";
+import { get_all_products } from "../../actions";
+import { useRouter } from "expo-router";
 
 const EditPAge = () => {
+  const navigation = useRouter();
+  const dispatch = useDispatch();
   const [images, setImages] = useState([]);
   const [entries, setEntries] = useState({
     title: "",
@@ -48,10 +56,11 @@ const EditPAge = () => {
       aspect: [4, 3],
       quality: 1,
       allowsMultipleSelection: false,
+      base64: true,
     });
 
     if (!result.canceled) {
-      setEntries((prev) => ({ ...prev, thumbnail: result.assets[0].uri }));
+      setEntries((prev) => ({ ...prev, thumbnail: result.assets[0] }));
     }
   }
   async function handleImages() {
@@ -61,11 +70,13 @@ const EditPAge = () => {
       aspect: [4, 3],
       quality: 1,
       allowsMultipleSelection: true,
+      base64: true,
     });
 
     if (!result.canceled) {
-      setImages((prev) => [...result.assets]);
+      return setImages((prev) => [...result.assets]);
     }
+    return Alert.alert("something went wrong");
   }
 
   async function handleSubmit() {
@@ -75,7 +86,7 @@ const EditPAge = () => {
     keys.forEach((ky) => {
       if (entries[ky] === "") {
         empty_keys.push(ky);
-        fact = true;
+        return (fact = true);
       }
     });
 
@@ -86,8 +97,50 @@ const EditPAge = () => {
       return Alert.alert("add Images", ``);
     }
 
-    return console.log("continue");
+    const form = new FormData();
+    form.append("title", title);
+    form.append("brand", brand);
+    form.append("price", price);
+    form.append("category", category);
+    form.append("description", description);
+    form.append("thumbnail", {
+      uri: thumbnail.uri,
+      type: thumbnail.type,
+      name: thumbnail.fileName,
+    });
+    images.forEach((img, index) => {
+      form.append(`images${index}`, {
+        uri: img.uri,
+        type: img.type,
+        name: img.fileName,
+      });
+    });
+
+    try {
+      const response = await fetch(DOMAIN + "/add_product", {
+        method: "POST",
+        body: form,
+      });
+
+      const data = await response.json();
+      if (response.status === 200) {
+        setEntries((prev) => ({
+          title: "",
+          brand: "",
+          price: "",
+          category: "",
+          description: "",
+          thumbnail: "",
+        }));
+        dispatch(get_all_products());
+        dispatch(get_store_products());
+        navigation.back();
+      }
+    } catch (error) {
+      Alert.alert("something went wrong");
+    }
   }
+  // Submit end
 
   function handleThumbnailDelete() {
     return setEntries((prev) => ({ ...prev, thumbnail: "" }));
@@ -162,8 +215,8 @@ const EditPAge = () => {
           >
             <Pressable onPress={handleThumbnailDelete}>
               <Image
-                source={{ uri: thumbnail }}
-                containerStyle={{ width: 200, height: 200 }}
+                source={{ uri: thumbnail.uri }}
+                style={{ width: 200, height: 200 }}
               />
             </Pressable>
           </View>
@@ -191,7 +244,7 @@ const EditPAge = () => {
                 >
                   <Image
                     source={{ uri: img.uri }}
-                    containerStyle={{ width: 150, height: 150 }}
+                    style={{ width: 150, height: 150 }}
                   />
                 </Pressable>
               );

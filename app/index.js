@@ -1,13 +1,11 @@
 import {
   StyleSheet,
-  Text,
   View,
   NativeModules,
   LayoutAnimation,
-  Pressable,
   Image,
 } from "react-native";
-import React, { createRef, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { check_auth, get_all_products } from "../actions";
 import { useDispatch } from "react-redux";

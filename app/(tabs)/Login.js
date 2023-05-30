@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,7 +12,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { DOMAIN } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { check_auth } from "../../actions";
 const Login = () => {
   const dispatch = useDispatch();
@@ -44,17 +44,23 @@ const Login = () => {
       });
       const data = await response.json();
       if (response.status !== 200) {
-        Alert.alert(data.message);
+        return Alert.alert(data.message);
       }
 
       const { message, username, token } = data;
+
       await AsyncStorage.setItem("token", token);
 
       setEntries((prev) => ({ username: "", password: "" }));
       dispatch(check_auth());
+
       return navigation.push("Home");
     } catch (error) {
-      Alert.alert("Something went went wrong", "please try agian in 5 minutes");
+      console.log(error.message);
+      return Alert.alert(
+        "Something went went wrong",
+        "please try agian in later"
+      );
     }
   }
 
@@ -82,6 +88,10 @@ const Login = () => {
             borderRadius: 12,
             backgroundColor: "white",
             elevation: 4,
+            shadowColor: "gray",
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
             paddingRight: 16,
           }}
         >
@@ -90,6 +100,7 @@ const Login = () => {
             placeholder="Password"
             placeholderTextColor="gray"
             secureTextEntry={fact}
+            autoCapitalize="none"
             value={password}
             onChangeText={(e) =>
               setEntries((prev) => ({ ...prev, password: e }))
@@ -146,6 +157,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     elevation: 4,
     padding: 8,
+    shadowColor: "gray",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
   password: {
     height: 76,

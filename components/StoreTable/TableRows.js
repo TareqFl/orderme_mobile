@@ -3,28 +3,52 @@ import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Image } from "@rneui/themed";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { useRouter } from "expo-router";
+
 import { useDispatch } from "react-redux";
-import { display_product, get_store_products } from "../../actions";
+import {
+  display_store_product,
+  get_store_products,
+  refresh_display_product,
+} from "../../actions";
 import { DOMAIN } from "@env";
 const TableRows = ({ value }) => {
-  const navigation = useRouter();
   const dispatch = useDispatch();
 
   async function handleDelete() {
-    const response = await fetch(DOMAIN + "/delete", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
+    // const response = await fetch(DOMAIN + "/delete", {
+    //   method: "DELETE",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ id: value.id }),
+    // });
+    // if (response.status === 200) {
+    //   dispatch(refresh_display_product());
+    //   dispatch(get_store_products());
+    // } else {
+    //   Alert.alert("something went wrong");
+    // }
+    Alert.alert("Warning!", "Are you sure you want to delete this product", [
+      { text: "No", onPress: () => {} },
+      {
+        text: "Yes",
+        onPress: async () => {
+          const response = await fetch(DOMAIN + "/delete", {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: value.id }),
+          });
+          if (response.status === 200) {
+            dispatch(refresh_display_product());
+            dispatch(get_store_products());
+          } else {
+            Alert.alert("something went wrong");
+          }
+        },
       },
-      body: JSON.stringify({ id: value.id }),
-    });
-    if (response.status === 200) {
-      Alert.alert("Deleted");
-      dispatch(get_store_products());
-    } else {
-      Alert.alert("something went wrong");
-    }
+    ]);
   }
 
   return (
@@ -77,7 +101,7 @@ const TableRows = ({ value }) => {
       <View style={styles.action}>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => dispatch(display_product(value))}
+          onPress={() => dispatch(display_store_product(value))}
         >
           <MaterialCommunityIcons name="eye" color={"tomato"} size={25} />
         </TouchableOpacity>

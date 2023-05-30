@@ -19,7 +19,7 @@ const ProductsCard = () => {
       )}
       initialNumToRender={15}
       numColumns={2}
-      onEndReachedThreshold={0}
+      onEndReachedThreshold={4}
       onEndReached={() => {
         if (renderImage + 10 > SearchedProduct.length) {
           return setRenderImage((value) => SearchedProduct.length);

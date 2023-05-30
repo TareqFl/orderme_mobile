@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 
 const DisplayProduct = () => {
   const navigation = useRouter();
-  const { Display_Product } = useSelector((state) => state);
+  const { Display_Store_Product } = useSelector((state) => state);
   const {
     // product_id,
     id,
@@ -18,7 +18,7 @@ const DisplayProduct = () => {
     description,
     thumbnail,
     images,
-  } = Display_Product;
+  } = Display_Store_Product;
   const RepeatedRow = ({ text1, text2, thumbnail, images }) => {
     return (
       <View
@@ -31,7 +31,7 @@ const DisplayProduct = () => {
         }}
       >
         <Text>{text1}</Text>
-        <Text style={{ textAlign: "right" }}>{text2}</Text>
+        <Text style={{ textAlign: "right", flex: 1 }}>{text2}</Text>
         {thumbnail && (
           <Image
             source={{ uri: thumbnail }}
@@ -39,17 +39,30 @@ const DisplayProduct = () => {
             containerStyle={{ width: 100, height: 100 }}
           />
         )}
-        {images &&
-          images.map((image, indx) => {
-            return (
-              <Image
-                key={indx}
-                source={{ uri: image }}
-                PlaceholderContent={<ActivityIndicator />}
-                containerStyle={{ width: 100, height: 100 }}
-              />
-            );
-          })}
+        <View
+          style={{
+            flexDirection: "row",
+            alignContent: "center",
+            gap: 8,
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          {images &&
+            images.map((image, indx) => {
+              return (
+                <Image
+                  key={indx}
+                  source={{ uri: image }}
+                  PlaceholderContent={<ActivityIndicator />}
+                  containerStyle={{
+                    width: 100,
+                    height: 100,
+                  }}
+                />
+              );
+            })}
+        </View>
       </View>
     );
   };

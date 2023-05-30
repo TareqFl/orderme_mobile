@@ -2,8 +2,11 @@ import { StyleSheet, StatusBar, SafeAreaView } from "react-native";
 import React from "react";
 import SearchBar from "../../components/HomeScreen/SearchBar";
 import ProductsCard from "../../components/HomeScreen/ProductsList";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const { Auth } = useSelector((state) => state);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={"dark-content"} />

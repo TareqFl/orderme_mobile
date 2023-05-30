@@ -21,10 +21,10 @@ const Comments = () => {
       {comments.map((comment, index) => {
         const user = users?.find((usr) => usr.id === comment.userId);
         if (!user) {
-          return <></>;
+          return;
         }
         return (
-          <View key={index} style={styles.CommentsContainer}>
+          <View key={comment.id} style={styles.CommentsContainer}>
             <View
               style={{
                 flexDirection: "row",

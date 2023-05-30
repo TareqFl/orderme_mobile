@@ -4,19 +4,21 @@ import {
   TextInput,
   View,
   NativeModules,
+  TouchableOpacity,
   LayoutAnimation,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { product_search } from "../../actions";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useRouter } from "expo-router";
 
 const { UIManager } = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true);
 
 const SearchBar = () => {
+  const navigation = useRouter();
   const dispatch = useDispatch();
   const { Products } = useSelector((state) => state);
   // handler
@@ -44,6 +46,7 @@ const SearchBar = () => {
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/logo.webp")} style={styles.logo} />
+
       <View
         style={{
           ...styles.searchContainer,

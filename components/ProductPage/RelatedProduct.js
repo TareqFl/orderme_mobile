@@ -7,16 +7,15 @@ import {
 import React from "react";
 import { Image } from "@rneui/themed";
 import { useRouter } from "expo-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { display_product } from "../../actions";
 
 const RelatedProduct = ({ item }) => {
-  const navigation = useRouter();
-  const { Products } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   // handler
   function handlePress() {
-    const indexOfProduct = Products.indexOf(item);
-    return navigation.push("Product/" + indexOfProduct);
+    return dispatch(display_product(item));
   }
 
   return (

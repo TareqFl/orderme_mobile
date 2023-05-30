@@ -7,6 +7,7 @@ import Cart from "./Cart";
 import Auth from "./auth_reducer";
 import Display_Product from "./display_product_reducer";
 import Store_Products from "./store_products_reducer";
+import Display_Store_Product from "./display_store_product_reducer";
 
 export const store = createStore(
   combineReducers({
@@ -16,6 +17,7 @@ export const store = createStore(
     Auth,
     Display_Product,
     Store_Products,
+    Display_Store_Product,
   }),
   applyMiddleware(thunk)
 );
