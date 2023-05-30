@@ -94,7 +94,9 @@ const TableRows = ({ value }) => {
         <Image
           containerStyle={{ width: "100%", height: "100%" }}
           source={{ uri: value.thumbnail }}
-          PlaceholderContent={<ActivityIndicator style={{ flex: 1 }} />}
+          PlaceholderContent={
+            <ActivityIndicator style={{ height: "100%", width: "100%" }} />
+          }
         />
       </View>
 

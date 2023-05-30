@@ -5,8 +5,6 @@ import ProductsCard from "../../components/HomeScreen/ProductsList";
 import { useSelector } from "react-redux";
 
 const Home = () => {
-  const { Auth } = useSelector((state) => state);
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={"dark-content"} />
