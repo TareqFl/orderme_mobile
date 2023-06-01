@@ -67,7 +67,6 @@ const DisplayProduct = () => {
     );
   };
 
-  console.log(Display_Store_Product);
   return (
     <View style={styles.container}>
       <RepeatedRow text1={"Product ID"} text2={id} />

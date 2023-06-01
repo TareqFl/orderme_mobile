@@ -7,6 +7,7 @@ import {
   Pressable,
   Alert,
   Image,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { OrientationLock, lockAsync } from "expo-screen-orientation";
@@ -17,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { get_store_products } from "../../actions";
 import { get_all_products } from "../../actions";
 import { useRouter } from "expo-router";
+import Categories from "../../components/StorePage/Categories";
 
 const EditPAge = () => {
   const navigation = useRouter();
@@ -89,14 +91,12 @@ const EditPAge = () => {
         return (fact = true);
       }
     });
-
     if (fact) {
       return Alert.alert("Emprty Field", `${empty_keys}`);
     }
     if (images.length === 0) {
       return Alert.alert("add Images", ``);
     }
-
     const form = new FormData();
     form.append("title", title);
     form.append("brand", brand);
@@ -115,13 +115,11 @@ const EditPAge = () => {
         name: img.fileName,
       });
     });
-
     try {
       const response = await fetch(DOMAIN + "/add_product", {
         method: "POST",
         body: form,
       });
-
       const data = await response.json();
       if (response.status === 200) {
         setEntries((prev) => ({
@@ -177,14 +175,20 @@ const EditPAge = () => {
           value={price}
           onChangeText={(e) => setEntries((prev) => ({ ...prev, price: e }))}
         />
-        <Input
+        {/* <Input
           containerStyle={styles.input}
           placeholder="Category"
           errorStyle={{ color: "red" }}
           errorMessage={category_error}
           value={category}
           onChangeText={(e) => setEntries((prev) => ({ ...prev, category: e }))}
-        />
+        /> */}
+        <View style={{ zIndex: 10, marginVertical: 10 }}>
+          <Categories
+            width={300}
+            onChange={(e) => setEntries((prev) => ({ ...prev, category: e }))}
+          />
+        </View>
         <Input
           containerStyle={styles.description}
           multiline={true}
@@ -266,23 +270,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingVertical: Platform.OS === "android" ? 50 : 20,
     flexDirection: "row",
     flexWrap: "wrap",
     backgroundColor: "white",
-    paddingVertical: 20,
   },
   input: {
     width: "50%",
     marginBottom: 12,
+    zIndex: 1,
   },
   description: {
-    textInput: {
-      height: 120,
-      borderColor: "gray",
-      borderWidth: 1,
-      fontSize: 16,
-      padding: 10,
-    },
+    height: 120,
+    borderColor: "gray",
+    borderWidth: 1,
+    fontSize: 16,
+    padding: 10,
   },
   button: {
     width: "100%",
@@ -293,5 +296,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 5,
+    zIndex: 1,
   },
 });

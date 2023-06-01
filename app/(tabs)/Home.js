@@ -1,8 +1,7 @@
-import { StyleSheet, StatusBar, SafeAreaView } from "react-native";
-import React from "react";
+import { StyleSheet, StatusBar, SafeAreaView, Alert } from "react-native";
+import React, { useEffect } from "react";
 import SearchBar from "../../components/HomeScreen/SearchBar";
 import ProductsCard from "../../components/HomeScreen/ProductsList";
-import { useSelector } from "react-redux";
 
 const Home = () => {
   return (

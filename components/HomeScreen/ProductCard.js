@@ -79,7 +79,7 @@ export default ProductCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: "47%",
+    width: "95%",
     padding: 4,
     flexDirection: "column",
     gap: 6,
@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
     marginLeft: "1.25%",
     marginRight: "1.25%",
     borderRadius: 4,
+    backgroundColor: "white",
     elevation: 8,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    backgroundColor: "white",
   },
   thumbnailContainer: {
     backgroundColor: "white",

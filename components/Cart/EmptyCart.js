@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Image } from "@rneui/themed";
+import { usePathname } from "expo-router";
 
 const { UIManager } = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -17,6 +18,7 @@ UIManager.setLayoutAnimationEnabledExperimental &&
 
 const EmptyCart = () => {
   const { width, height } = Dimensions.get("screen");
+  const path = usePathname();
 
   //   Far Right
   const px1 = width / 2.7;
@@ -59,6 +61,7 @@ const EmptyCart = () => {
 
     return () => clearInterval(repeat);
   }, [start]);
+
   return (
     <View
       style={{

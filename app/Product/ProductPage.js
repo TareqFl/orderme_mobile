@@ -11,7 +11,7 @@ import {
   FlatList,
 } from "react-native";
 import { Image } from "@rneui/themed";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Octicons from "react-native-vector-icons/Octicons";
@@ -23,6 +23,7 @@ import { add_to_cart } from "../../actions";
 const ProductPage = () => {
   const { width } = useWindowDimensions();
   const navigation = useRouter();
+  const path = usePathname();
   const dispatch = useDispatch();
   const { Products, Display_Product, Cart } = useSelector((state) => state);
 
@@ -104,6 +105,10 @@ const ProductPage = () => {
     }
   }
 
+  if (path !== "/Product/ProductPage") {
+    return <></>;
+  }
+
   return (
     <SafeAreaView
       style={{
@@ -117,7 +122,7 @@ const ProductPage = () => {
         contentContainerStyle={{ padding: 16 }}
       >
         <FlatList
-          keyExtractor={({ item }) => item}
+          keyExtractor={(item) => item.toString()}
           data={images.length > 0 ? [...images] : []}
           renderItem={({ item }) => (
             <Image
@@ -218,7 +223,7 @@ const ProductPage = () => {
         </Text>
         <FlatList
           data={relatedProducts}
-          keyExtractor={({ item }) => item}
+          keyExtractor={(item) => item.title}
           renderItem={({ item }) =>
             item !== Display_Product && <RelatedProduct item={item} />
           }

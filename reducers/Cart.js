@@ -12,7 +12,7 @@ export default function cart_reducer(state = INITIAL_STATE, action) {
       return (state = payload);
 
     case CLEAR_CART:
-      return (state = INITIAL_STATE);
+      return (state = []);
     default:
       return state;
   }

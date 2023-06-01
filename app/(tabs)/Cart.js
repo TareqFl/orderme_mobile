@@ -13,7 +13,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import CartProducts from "../../components/Cart/CartProducts";
 import { useRouter } from "expo-router";
 import EmptyCart from "../../components/Cart/EmptyCart";
-import { useFocusEffect } from "expo-router";
+
 const CartPage = () => {
   const navigation = useRouter();
   const { Cart } = useSelector((state) => state);

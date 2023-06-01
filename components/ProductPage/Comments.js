@@ -24,7 +24,7 @@ const Comments = () => {
           return;
         }
         return (
-          <View key={comment.id} style={styles.CommentsContainer}>
+          <View key={comment.body} style={styles.CommentsContainer}>
             <View
               style={{
                 flexDirection: "row",

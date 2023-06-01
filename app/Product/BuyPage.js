@@ -12,12 +12,13 @@ import {
 import React, { useEffect, useState } from "react";
 import { CardField, useStripe } from "@stripe/stripe-react-native";
 import { DOMAIN } from "@env";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "expo-router";
+import { clear_cart } from "../../actions";
 
 const BuyPage = () => {
   const navigation = useRouter();
-
+  const dispatch = useDispatch();
   const { confirmPayment } = useStripe();
   const { Cart } = useSelector((state) => state);
 
@@ -46,15 +47,17 @@ const BuyPage = () => {
 
       if (cardDetails.error) {
         Alert.alert(cardDetails.error.message);
+        console.log(cardDetails.error);
         return setPaymentError(cardDetails.error);
       } else if (cardDetails.paymentMethodId) {
         console.log(cardDetails.paymentIntent);
         return setPaymentMethodId(cardDetails.paymentMethodId);
       }
       Alert.alert("Success");
+      dispatch(clear_cart());
       return navigation.push("Home");
     } catch (error) {
-      console.error("Payment error:", error);
+      return Alert.alert(("Its not you its Us", error.message));
     }
   }
 

@@ -15,21 +15,7 @@ const TableRows = ({ value }) => {
   const dispatch = useDispatch();
 
   async function handleDelete() {
-    // const response = await fetch(DOMAIN + "/delete", {
-    //   method: "DELETE",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ id: value.id }),
-    // });
-    // if (response.status === 200) {
-    //   dispatch(refresh_display_product());
-    //   dispatch(get_store_products());
-    // } else {
-    //   Alert.alert("something went wrong");
-    // }
     Alert.alert("Warning!", "Are you sure you want to delete this product", [
-      { text: "No", onPress: () => {} },
       {
         text: "Yes",
         onPress: async () => {
@@ -48,6 +34,7 @@ const TableRows = ({ value }) => {
           }
         },
       },
+      { text: "No", onPress: () => {} },
     ]);
   }
 

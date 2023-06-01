@@ -14,6 +14,7 @@ import { DOMAIN } from "@env";
 import { useRouter } from "expo-router";
 import { get_store_products, refresh_display_product } from "../../actions";
 import * as ImagePicker from "expo-image-picker";
+import Categories from "../../components/StorePage/Categories";
 
 const EditProduct = () => {
   const navigation = useRouter();
@@ -47,7 +48,6 @@ const EditProduct = () => {
   } = entries;
 
   useEffect(() => {
-    console.log(Display_Store_Product.brand);
     setEntries((prev) => ({
       ...Display_Store_Product,
       changed_thumbnail: false,
@@ -128,26 +128,29 @@ const EditProduct = () => {
           name: img.fileName,
         });
     });
-    const response = await fetch(DOMAIN + "/update_product", {
-      method: "POST",
-      body: form,
-    });
-
-    if (toDelete.length > 0) {
-      toDelete.map((img) => {
-        fetch(img, { method: "DELETE" })
-          .then((resp) => resp)
-          .catch((err) => err);
+    try {
+      const response = await fetch(DOMAIN + "/update_product", {
+        method: "POST",
+        body: form,
       });
-    }
 
-    const data = await response.json();
-    if (response.status === 200) {
-      navigation.back();
-      dispatch(refresh_display_product());
-      return dispatch(get_store_products());
+      if (toDelete.length > 0) {
+        toDelete.map((img) => {
+          fetch(img, { method: "DELETE" })
+            .then((resp) => resp)
+            .catch((err) => err);
+        });
+      }
+      const data = await response.json();
+      if (response.status === 200) {
+        navigation.back();
+        dispatch(refresh_display_product());
+        return dispatch(get_store_products());
+      }
+      return Alert.alert("something went wrong please try again");
+    } catch (error) {
+      Alert.alert("Something went wrong", error.message);
     }
-    return Alert.alert("something went wrong please try again");
   }
 
   function handleImageDelete(img, index) {
@@ -196,16 +199,17 @@ const EditProduct = () => {
             return setEntries((prev) => ({ ...prev, price: e }));
           }}
         />
-        <Input
+        {/* <Input
           containerStyle={styles.input}
           placeholder="Category"
           value={category}
           onChangeText={(e) => {
             return setEntries((prev) => ({ ...prev, category: e }));
           }}
-        />
+        /> */}
+
         <Input
-          containerStyle={styles.description}
+          containerStyle={[styles.description, { zIndex: 1 }]}
           multiline={true}
           numberOfLines={4}
           maxLength={250}
@@ -216,11 +220,30 @@ const EditProduct = () => {
           }}
         />
       </View>
-      <Text style={{ textAlign: "center" }}> Click on an Image to delete</Text>
+      <View
+        style={{
+          zIndex: 10,
+          height: 150,
+          justifyContent: "flex-start",
+        }}
+      >
+        <Categories
+          intitial={category}
+          width={250}
+          height={125}
+          onChange={(e) => setEntries((prev) => ({ ...prev, category: e }))}
+        />
+      </View>
+      <Text style={{ textAlign: "center", zIndex: 1 }}>
+        {" "}
+        Click on an Image to delete
+      </Text>
+
       <View
         style={{
           width: "100%",
           paddingHorizontal: 16,
+          zIndex: 1,
         }}
       >
         <View
@@ -230,6 +253,7 @@ const EditProduct = () => {
             justifyContent: "space-between",
             width: "100%",
             marginVertical: 16,
+            zIndex: 1,
           }}
         >
           <TouchableOpacity style={styles.upload} onPress={handleThumbnail}>
@@ -333,6 +357,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 5,
+    zIndex: 1,
   },
   uploadText: { color: "white", fontWeight: "900" },
+  input: {
+    zIndex: 1,
+  },
+  description: {
+    height: 120,
+    borderColor: "gray",
+    fontSize: 16,
+    padding: 10,
+    zIndex: 1,
+  },
 });

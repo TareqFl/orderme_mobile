@@ -6,7 +6,7 @@ import {
   Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 import { check_auth, get_all_products } from "../actions";
 import { useDispatch } from "react-redux";
 
@@ -31,36 +31,53 @@ const Splash = () => {
   });
 
   const navigation = useRouter();
-
+  const path = usePathname();
   useEffect(() => {
-    dispatch(check_auth());
-    dispatch(get_all_products());
-    const timer = setTimeout(() => {
-      LayoutAnimation.spring(() => {
-        navigation.push("Home");
-      });
-      setshdw((prev) => ({
-        elevation: 8,
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 8,
-      }));
+    const handleSplash = () => {
+      dispatch(check_auth());
+      dispatch(get_all_products());
+      if (path === "/") {
+        LayoutAnimation.spring(() => {
+          navigation.push("Home");
+        });
+        return setAnimText({
+          height: 150,
+          width: 150,
+          borderRadius: 100,
+        });
+      }
       return setAnimText({
-        height: 150,
-        width: 150,
-        borderRadius: 100,
+        height: "100%",
+        width: "100%",
+        borderRadius: 0,
       });
-    }, 100);
+    };
+
+    const timer = setTimeout(() => handleSplash(), 100);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [path]);
   return (
-    <View style={{ ...styles.container, ...shdw }}>
-      <Image
-        source={require("../assets/logo.webp")}
-        style={{ ...animText, backgroundColor: "white" }}
-      />
+    <View style={{ ...styles.container }}>
+      <View
+        style={{
+          ...animText,
+          elevation: 4,
+          shadowColor: "black",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.5,
+          shadowRadius: 4,
+          backgroundColor: "white",
+        }}
+      >
+        <Image
+          source={require("../assets/logo.webp")}
+          style={{
+            ...animText,
+          }}
+          resizeMode="stretch"
+        />
+      </View>
     </View>
   );
 };
@@ -72,5 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "white",
   },
 });
