@@ -37,11 +37,13 @@ const CartProducts = ({ item }) => {
 
     if (item.quantity === 1) {
       all_products = Cart.filter((prod) => prod !== item);
+      console.log(all_products.length);
       return dispatch(add_to_cart([...all_products]));
     }
-    all_products = Cart.filter(
-      (prod) => prod === item && (item.quantity = item.quantity - 1)
+    all_products = Cart.filter((prod) =>
+      prod === item ? (item.quantity = item.quantity - 1) : prod
     );
+
     return dispatch(add_to_cart([...all_products]));
   }
 

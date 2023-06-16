@@ -7,6 +7,14 @@
       "policy": "sdkVersion"
     },
     "android": {},
-    "ios": {}
+    "ios": {},
+    "extra": {
+      "eas": {
+        "projectId": "7c695fa0-bf15-4025-8f23-9404bcfaac87"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/7c695fa0-bf15-4025-8f23-9404bcfaac87"
+    }
   }
 }

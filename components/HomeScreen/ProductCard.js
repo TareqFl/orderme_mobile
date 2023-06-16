@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Image } from "@rneui/themed";
-import React from "react";
+import React, { useEffect } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,15 +27,12 @@ const ProductCard = ({ item, index }) => {
     if (found_product) {
       found_product.quantity = found_product.quantity + 1;
       all_products[index] = found_product;
-
       return dispatch(add_to_cart([...all_products]));
-    } else {
-      item.quantity = 1;
-      all_products.push(item);
-
-      return dispatch(add_to_cart([...all_products]));
-    }
+    } else item.quantity = 1;
+    all_products.push(item);
+    return dispatch(add_to_cart([...all_products]));
   }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity

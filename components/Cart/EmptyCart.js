@@ -3,12 +3,11 @@ import {
   Text,
   View,
   NativeModules,
-  LayoutAnimation,
   Dimensions,
   Platform,
   StatusBar,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Image } from "@rneui/themed";
 import { usePathname } from "expo-router";
 
@@ -39,7 +38,7 @@ const EmptyCart = () => {
   const py3 = 0;
 
   const [PosX, setPosX] = useState(px2);
-  const [PosY, setPosY] = useState(py1);
+  const [PosY, setPosY] = useState(py2);
   const [start, setStart] = useState(1);
 
   const logo_pos = [
@@ -48,19 +47,19 @@ const EmptyCart = () => {
     { x: px3, y: height / 5 },
     { x: px2, y: height / 2.7 },
   ];
-  useEffect(() => {
-    const repeat = setInterval(() => {
-      LayoutAnimation.spring();
-      if (start === logo_pos.length) {
-        setStart(0);
-      }
-      setStart((prev) => prev + 1);
-      setPosX((prev) => logo_pos[start - 1].x);
-      setPosY((prev) => logo_pos[start - 1].y);
-    }, 1500);
+  // useEffect(() => {
+  //   const repeat = setInterval(() => {
+  //     LayoutAnimation.spring();
+  //     if (start === logo_pos.length) {
+  //       setStart(0);
+  //     }
+  //     setStart((prev) => prev + 1);
+  //     setPosX((prev) => logo_pos[start - 1].x);
+  //     setPosY((prev) => logo_pos[start - 1].y);
+  //   }, 1500);
 
-    return () => clearInterval(repeat);
-  }, [start]);
+  //   return () => clearInterval(repeat);
+  // }, [start]);
 
   return (
     <View
@@ -76,10 +75,10 @@ const EmptyCart = () => {
           height: 100,
           width: 100,
           borderRadius: 50,
-          left: PosX,
-          top: PosY,
-          position: "absolute",
-          transform: [{ translateX: PosX }, { translateY: PosY }],
+          // left: PosX,
+          // top: PosY,
+          // position: "absolute",
+          // transform: [{ translateX: PosX }, { translateY: PosY }],
           overflow: "hidden",
         }}
       >
