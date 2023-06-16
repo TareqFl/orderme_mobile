@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { CardField, useStripe } from "@stripe/stripe-react-native";
-import { DOMAIN } from "@env";
+import { DOMAIN } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "expo-router";
 import { clear_cart } from "../../actions";
@@ -20,7 +20,7 @@ const BuyPage = () => {
   const navigation = useRouter();
   const dispatch = useDispatch();
   const { confirmPayment } = useStripe();
-  const { Cart } = useSelector((state) => state);
+  const Cart = useSelector((state) => state.Cart);
 
   const [CartQuantity, setCartQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);

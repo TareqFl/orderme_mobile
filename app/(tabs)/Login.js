@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,11 +8,11 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { DOMAIN } from "@env";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { DOMAIN } from "../../Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { check_auth } from "../../actions";
 const Login = () => {
   const dispatch = useDispatch();

@@ -20,10 +20,11 @@ import DisplayProduct from "../../components/StorePage/DisplayProduct";
 const Store = () => {
   const navigation = useRouter();
   const dispatch = useDispatch();
-  const { Auth, Display_Store_Product, Store_Products } = useSelector(
-    (state) => state
+  const { auth, token } = useSelector((state) => state.Auth);
+  const Display_Store_Product = useSelector(
+    (state) => state.Display_Store_Product
   );
-  const { auth, token } = Auth;
+  const Store_Products = useSelector((state) => state.Store_Products);
 
   useEffect(() => {
     dispatch(get_store_products());

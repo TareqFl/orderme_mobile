@@ -10,7 +10,7 @@ import {
   get_store_products,
   refresh_display_product,
 } from "../../actions";
-import { DOMAIN } from "@env";
+import { DOMAIN } from "../../Api";
 const TableRows = ({ value }) => {
   const dispatch = useDispatch();
 

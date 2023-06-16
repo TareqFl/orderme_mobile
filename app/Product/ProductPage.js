@@ -25,8 +25,9 @@ const ProductPage = () => {
   const navigation = useRouter();
   const path = usePathname();
   const dispatch = useDispatch();
-  const { Products, Display_Product, Cart } = useSelector((state) => state);
-
+  const Products = useSelector((state) => state.Products);
+  const Cart = useSelector((state) => state.Cart);
+  const Display_Product = useSelector((state) => state.Display_Product);
   const {
     id,
     title,
@@ -38,7 +39,6 @@ const ProductPage = () => {
     thumbnail,
     images,
   } = Display_Product;
-
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   useEffect(() => {

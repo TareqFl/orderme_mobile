@@ -9,11 +9,11 @@ import {
   Image,
   Platform,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { OrientationLock, lockAsync } from "expo-screen-orientation";
+import React, { useState } from "react";
+
 import { Input } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
-import { DOMAIN } from "@env";
+import { DOMAIN } from "../../Api";
 import { useDispatch } from "react-redux";
 import { get_store_products } from "../../actions";
 import { get_all_products } from "../../actions";

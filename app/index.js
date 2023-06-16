@@ -22,14 +22,6 @@ const Splash = () => {
     borderRadius: 0,
   });
 
-  const [shdw, setshdw] = useState({
-    elevation: 0,
-    shadowColor: "",
-    shadowOffset: {},
-    shadowOpacity: 0,
-    shadowRadius: 0,
-  });
-
   const navigation = useRouter();
   const path = usePathname();
   useEffect(() => {

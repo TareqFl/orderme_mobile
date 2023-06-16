@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Input, Image } from "@rneui/themed";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { DOMAIN } from "@env";
+import { DOMAIN } from "../../Api";
 import { useRouter } from "expo-router";
 import { get_store_products, refresh_display_product } from "../../actions";
 import * as ImagePicker from "expo-image-picker";
@@ -19,7 +19,9 @@ import Categories from "../../components/StorePage/Categories";
 const EditProduct = () => {
   const navigation = useRouter();
   const dispatch = useDispatch();
-  const { Display_Store_Product } = useSelector((state) => state);
+  const Display_Store_Product = useSelector(
+    (state) => state.Display_Store_Product
+  );
   const [toDelete, setToDelete] = useState([]);
   const [entries, setEntries] = useState({
     id: "",

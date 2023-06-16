@@ -6,8 +6,8 @@ import {
 } from "react-native";
 import React from "react";
 import { Image } from "@rneui/themed";
-import { useRouter } from "expo-router";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useDispatch } from "react-redux";
 import { display_product } from "../../actions";
 
 const RelatedProduct = ({ item }) => {

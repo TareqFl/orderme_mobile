@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { store } from "../reducers";
 import { Platform } from "react-native";
 import { StripeProvider } from "@stripe/stripe-react-native";
-import { STRIPE_PK } from "@env";
+import { STRIPE_PK } from "../Api";
 const StackLayout = () => {
   return (
     <Provider store={store}>

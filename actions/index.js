@@ -13,7 +13,7 @@ import {
   REFRESH_DISPLAY_PRODUCT,
   DISPLAY_STORE_PRODUCT,
 } from "./types";
-import { DOMAIN } from "@env";
+import { DOMAIN } from "../Api";
 import fakeData from "../fakeData.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

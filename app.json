@@ -1,19 +1,23 @@
 {
   "expo": {
     "scheme": "acme",
-    "orientation": "portrait",
     "web": {
       "bundler": "metro"
     },
-    "name": "emobile",
-    "slug": "emobile",
-    "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
-        }
-      ]
-    ]
+    "name": "e_mobile",
+    "slug": "e_mobile",
+    "extra": {
+      "eas": {
+        "projectId": "7d4e1d27-ed39-4e50-a75a-f5ff09e404e3"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/7d4e1d27-ed39-4e50-a75a-f5ff09e404e3"
+    },
+    "android": {},
+    "ios": {}
   }
 }

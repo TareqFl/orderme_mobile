@@ -1,5 +1,4 @@
 import {
-  Dimensions,
   FlatList,
   SafeAreaView,
   StatusBar,
@@ -16,7 +15,7 @@ import EmptyCart from "../../components/Cart/EmptyCart";
 
 const CartPage = () => {
   const navigation = useRouter();
-  const { Cart } = useSelector((state) => state);
+  const Cart = useSelector((state) => state.Cart);
 
   const [totalAmount, setTotalAmount] = useState(0);
 

@@ -11,7 +11,7 @@ import {
 import { useSelector } from "react-redux";
 
 const CartBadge = ({ cart, cc }) => {
-  const { Cart } = useSelector((state) => state);
+  const Cart = useSelector((state) => state.Cart);
 
   return (
     <View

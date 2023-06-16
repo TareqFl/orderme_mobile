@@ -8,7 +8,7 @@ import { FlashList } from "@shopify/flash-list";
 const ProductsCard = () => {
   const path = usePathname();
 
-  const { SearchedProduct } = useSelector((state) => state);
+  const SearchedProduct = useSelector((state) => state.SearchedProduct);
   const [renderImage, setRenderImage] = useState(12);
 
   const renderItemsFunc = ({ item, index }) => (
@@ -27,16 +27,6 @@ const ProductsCard = () => {
     }
   };
   return (
-    // <FlatList
-    //   keyExtractor={(item) => item.name + `${Math.random()}`}
-    //   data={[...SearchedProduct.slice(0, renderImage)]}
-    //   ItemSeparatorComponent={() => (
-    //     <View style={{ width: "100%", height: 20 }}></View>
-    //   )}
-    //   renderItem={renderItemsFunc}
-    //   initialNumToRender={5}
-
-    // />
     <FlashList
       data={[...SearchedProduct.slice(0, renderImage)]}
       renderItem={renderItemsFunc}

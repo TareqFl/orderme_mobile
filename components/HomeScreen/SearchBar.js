@@ -20,7 +20,7 @@ UIManager.setLayoutAnimationEnabledExperimental &&
 const SearchBar = () => {
   const navigation = useRouter();
   const dispatch = useDispatch();
-  const { Products } = useSelector((state) => state);
+  const Products = useSelector((state) => state.Products);
   // handler
   function handleSearch(text) {
     dispatch(product_search(text, Products));

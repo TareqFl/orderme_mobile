@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { FlashList } from "@shopify/flash-list";
 const Comments = () => {
   const [comments, setComments] = useState([]);
   const [users, setUsers] = useState([]);
@@ -16,15 +16,16 @@ const Comments = () => {
       .then((data) => setUsers(data.users))
       .catch((err) => alert(err.message));
   }, []);
+
   return (
     <View>
       {comments.map((comment, index) => {
         const user = users?.find((usr) => usr.id === comment.userId);
         if (!user) {
-          return;
+          return <></>;
         }
         return (
-          <View key={comment.body} style={styles.CommentsContainer}>
+          <View key={index} style={styles.CommentsContainer}>
             <View
               style={{
                 flexDirection: "row",
@@ -41,7 +42,7 @@ const Comments = () => {
                 {user.firstName} {user.lastName}
               </Text>
               {[1, 2, 3, 4, 5].map((nmbr, idx) => (
-                <MaterialIcons name="stars" color="orange" />
+                <MaterialIcons key={idx} name="stars" color="orange" />
               ))}
             </View>
 

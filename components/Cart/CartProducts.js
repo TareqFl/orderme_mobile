@@ -7,7 +7,7 @@ import { add_to_cart } from "../../actions";
 import Ionicons from "react-native-vector-icons/Ionicons";
 const CartProducts = ({ item }) => {
   const dispatch = useDispatch();
-  const { Cart } = useSelector((state) => state);
+  const Cart = useSelector((state) => state.Cart);
 
   function handleAdd() {
     const all_products = Cart;

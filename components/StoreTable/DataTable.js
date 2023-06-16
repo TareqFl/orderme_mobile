@@ -4,7 +4,7 @@ import TableRows from "./TableRows";
 import { useSelector } from "react-redux";
 
 const DataTable = () => {
-  const { Store_Products } = useSelector((state) => state);
+  const Store_Products = useSelector((state) => state.Store_Products);
   const obj_keys = [
     {
       value: "id",

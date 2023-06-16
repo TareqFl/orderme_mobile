@@ -1,6 +1,6 @@
-import Icon from "react-native-vector-icons/AntDesign";
-import Fontisto from "react-native-vector-icons/Fontisto";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Icon from "@expo/vector-icons/AntDesign";
+import Fontisto from "@expo/vector-icons/Fontisto";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs, useRouter } from "expo-router";
 import {
   Platform,
@@ -10,8 +10,6 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useState } from "react";
 
@@ -25,7 +23,7 @@ UIManager.setLayoutAnimationEnabledExperimental &&
 
 export default () => {
   const dispatch = useDispatch();
-  const { Auth } = useSelector((state) => state);
+  const Auth = useSelector((state) => state.Auth);
   const { auth } = Auth;
   const [allIcons, setAllIcons] = useState({
     home: 25,

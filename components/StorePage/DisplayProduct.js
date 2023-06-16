@@ -7,7 +7,9 @@ import { useRouter } from "expo-router";
 
 const DisplayProduct = () => {
   const navigation = useRouter();
-  const { Display_Store_Product } = useSelector((state) => state);
+  const Display_Store_Product = useSelector(
+    (state) => state
+  ).Display_Store_Product;
   const {
     // product_id,
     id,
