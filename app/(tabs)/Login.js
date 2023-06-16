@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { DOMAIN } from "../../Api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
 import { useDispatch } from "react-redux";
 import { check_auth } from "../../actions";
@@ -49,7 +49,7 @@ const Login = () => {
 
       const { message, username, token } = data;
 
-      await AsyncStorage.setItem("token", token);
+      await SecureStore.setItemAsync("token", token);
 
       setEntries((prev) => ({ username: "", password: "" }));
       dispatch(check_auth());

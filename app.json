@@ -1,21 +1,10 @@
 {
   "expo": {
     "scheme": "acme",
-    "web": {
-      "bundler": "metro"
-    },
     "name": "e_mobile",
     "slug": "e_mobile",
-    "extra": {
-      "eas": {
-        "projectId": "7d4e1d27-ed39-4e50-a75a-f5ff09e404e3"
-      }
-    },
     "runtimeVersion": {
       "policy": "sdkVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/7d4e1d27-ed39-4e50-a75a-f5ff09e404e3"
     },
     "android": {},
     "ios": {}

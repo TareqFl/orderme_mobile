@@ -15,7 +15,7 @@ import {
 } from "./types";
 import { DOMAIN } from "../Api";
 import fakeData from "../fakeData.json";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 export const get_all_products = () => async (dispatch) => {
   try {
@@ -46,7 +46,7 @@ export const product_search = (text, value) => {
 
 export const check_auth = () => async (dispatch) => {
   try {
-    const stored_token = await AsyncStorage.getItem("token");
+    const stored_token = await SecureStore.getItemAsync("token");
     if (!stored_token) {
       return dispatch({
         type: CHECK_AUTH,
@@ -77,7 +77,7 @@ export const check_auth = () => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   try {
-    await AsyncStorage.removeItem("token");
+    await SecureStore.deleteItemAsync("token");
     return dispatch({
       type: LOGOUT,
       payload: { auth: false, username: "Guest" },
@@ -89,7 +89,7 @@ export const logout = () => async (dispatch) => {
 
 export const get_store_products = () => async (dispatch) => {
   try {
-    const token = await AsyncStorage.getItem("token");
+    const token = await SecureStore.getItemAsync("token");
     const response = await fetch(DOMAIN + "/get_product", {
       method: "GET",
       headers: {
