@@ -32,6 +32,7 @@ const CartProducts = ({ item }) => {
       return dispatch(add_to_cart([...all_products]));
     }
   }
+
   function handleRemove() {
     let all_products = [];
 

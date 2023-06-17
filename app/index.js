@@ -30,7 +30,7 @@ const Splash = () => {
       dispatch(get_all_products());
       if (path === "/") {
         LayoutAnimation.spring(() => {
-          navigation.push("Home");
+          navigation.replace("Home");
         });
         return setAnimText({
           height: 150,
